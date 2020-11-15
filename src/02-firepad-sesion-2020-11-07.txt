@@ -1,0 +1,405 @@
+npm install style-loader css-loader --save-dev
+  entry: {
+    app: './student.js',
+    appStyles: ['./mystyles.css']
+  },
+
+
+***
+
+npm install clean-webpack-plugin --save-dev
+
+***
+
+    new CleanWebpackPlugin(),
+
+***
+
+const path = require("path");
+path: path.resolve(process.cwd(), "dist"),
+
+***
+
+npm install mini-css-extract-plugin --save-dev
+
+***
+
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+***
+
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+
+***
+
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css",
+    }),
+
+
+***
+
+npm install bootstrap --save
+
+***
+
+vendorStyles: ['./node_modules/bootstrap/dist/css/bootstrap.css'],
+
+
+***
+
+    <div class="jumbotron">
+      <h1>Testing Bootstrap</h1>
+      <p>Bootstrap is the most popular ...</p>
+    </div>
+***
+
+$blue-color: teal;
+
+.red-background {
+  background-color: $blue-color;
+}
+
+***
+
+npm install sass sass-loader --save-dev
+
+***
+
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              implementation: require("sass"),
+            },
+          },
+        ],
+      },
+
+
+***
+
+const basePath = __dirname;
+
+***
+
+  context: path.join(basePath, 'src'),
+
+***
+      {
+        test: /\.(png|jpg)$/,
+        type: "asset/resource",
+      },
+
+***
+
+img {
+  display: block;
+  width: 200px;
+}
+
+***
+
+    <img src="./src/content/logo_2.png" />
+
+***
+
+npm install html-loader --save-dev
+
+***
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Webpack 4.x by sample</title>
+  </head>
+  <body>
+    Hello Webpack!
+  </body>
+</html>
+
+***
+
+npm install react react-dom --save
+
+***
+
+    <div id="root"></div>
+
+***
+
+import React from "react";
+import { getAvg } from "./averageService";
+
+export const AverageComponent = () => {
+  const [average, setAverage] = React.useState(0);
+
+  React.useEffect(() => {
+    const scores = [90, 75, 60, 99, 94, 30];
+    setAverage(getAvg(scores));
+  }, []);
+
+  return (
+    <div>
+      <span>Students average: {average}</span>
+    </div>
+  );
+};
+
+***
+
+import React from "react";
+import ReactDOM from "react-dom";
+import { AverageComponent } from "./averageComponent";
+
+ReactDOM.render(
+  <div>
+    <h1>Hello from React DOM</h1>
+    <AverageComponent />
+  </div>,
+  document.getElementById("root")
+);
+
+***
+
+, "@babel/preset-react"
+
+***
+
+  resolve: {
+    extension: ['.js', '.jsx'],
+  },
+
+
+***
+
+npm install webpack-merge --save-dev
+
+***
+const { merge } = require("webpack-merge");
+
+***
+
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("path");
+const basePath = __dirname;
+
+import { merge } from "webpack-merge";
+
+module.exports = merge(
+  {},
+  {
+    context: path.join(basePath, "src"),
+    resolve: {
+      extensions: [".js", ".jsx"],
+    },
+    entry: {
+      app: "./index.jsx",
+      appStyles: ["./mystyles.scss"],
+      vendorStyles: ["../node_modules/bootstrap/dist/css/bootstrap.css"],
+    },
+    output: {
+      filename: "[name].[chunkhash].js",
+      path: path.resolve(process.cwd(), "dist"),
+      publicPath: "/",
+    },
+    module: {
+      rules: [
+        {
+          test: /\.jsx?$/,
+          exclude: /node_modules/,
+          loader: "babel-loader",
+        },
+        {
+          test: /\.(png|jpg)$/,
+          type: "asset/resource",
+        },
+        {
+          test: /\.html$/,
+          loader: "html-loader",
+        },
+        {
+          test: /\.css$/,
+          use: [MiniCssExtractPlugin.loader, "css-loader"],
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            "css-loader",
+            {
+              loader: "sass-loader",
+              options: {
+                implementation: require("sass"),
+              },
+            },
+          ],
+        },
+      ],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        filename: "index.html", // nombre en dist
+        template: "index.html", // nombre en el src
+      }),
+      new CleanWebpackPlugin(),
+      new MiniCssExtractPlugin({
+        filename: "[name].css",
+        chunkFilename: "[id].css",
+      }),
+    ],
+  }
+);
+
+***
+
+averageComponentStyles.scss
+
+***
+$background: teal;
+
+.result-background {
+  background-color: $background;
+}
+
+***
+
+className="result-background"
+
+***
+appStyles: ["./mystyles.scss", './averageComponentStyles.scss'],
+
+***
+
+import React from "react";
+import { getTotalScore } from "./averageService";
+
+export const TotalScoreComponent = () => {
+  const [totalScore, setTotalScore] = React.useState(0);
+
+  React.useEffect(() => {
+    const scores = [10, 20, 30, 40, 50];
+    setTotalScore(getTotalScore(scores));
+  }, []);
+
+  return (
+    <div>
+      <span className="result-background">
+        Students total score: {totalScore}
+      </span>
+    </div>
+  );
+};
+
+****
+
+$background: indianred;
+
+.result-background {
+  background-color: $background;
+}
+
+***
+import { TotalScoreComponent } from './totalScoreComponent';
+
+****
+
+ReactDOM.render(
+  <div>
+    <h1>Hello from React DOM</h1>
+    <AverageComponent />
+    <TotalScoreComponent />
+  </div>,
+  document.getElementById("root")
+);
+
+***
+'./totalScoreComponentStyles.scss',
+
+***
+
+import React from "react";
+import { getAvg } from "./averageService";
+const classes = require("./averageComponentStyles.scss").default;
+
+export const AverageComponent = () => {
+  const [average, setAverage] = React.useState(0);
+
+  React.useEffect(() => {
+    const scores = [90, 75, 60, 99, 94, 30];
+    setAverage(getAvg(scores));
+  }, []);
+
+  return (
+    <div>
+      <span className={classes["result-background"]}>
+        Students average: {average}
+      </span>
+    </div>
+  );
+};
+
+***
+
+import React from "react";
+import { getTotalScore } from "./averageService";
+const classes = require("./totalScoreComponentStyles.scss").default;
+
+export const TotalScoreComponent = () => {
+  const [totalScore, setTotalScore] = React.useState(0);
+
+  React.useEffect(() => {
+    const scores = [10, 20, 30, 40, 50];
+    setTotalScore(getTotalScore(scores));
+  }, []);
+
+  return (
+    <div>
+      <span className="classes['result-background']">
+        Students total score: {totalScore}
+      </span>
+    </div>
+  );
+};
+
+
+****
+
+
+import React from "react";
+import { getTotalScore } from "./averageService";
+const classes = require("./totalScoreComponentStyles.scss").default;
+
+export const TotalScoreComponent = () => {
+  const [totalScore, setTotalScore] = React.useState(0);
+
+  React.useEffect(() => {
+    const scores = [10, 20, 30, 40, 50];
+    setTotalScore(getTotalScore(scores));
+  }, []);
+
+  return (
+    <div>
+      <span className={classes["result-background"]}>
+        Students total score: {totalScore}
+      </span>
+    </div>
+  );
+};
+
+
+
+
+
+
+
