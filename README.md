@@ -715,12 +715,7 @@ export const TotalScoreComponent: React.FunctionComponent = () => {
         use: [
           MiniCssExtractPlugin.loader,
           {
-            loader: "css-loader",
-            options: {
-              import: false,
--                            modules: true,
-+              modules: {
-+                exportLocalsConvention: "camelCase",
+            C
 +              },
             },
           },
@@ -930,7 +925,7 @@ npm install npm-run-all --save-dev
 +    "type-check": "tsc --noEmit",  // 1. Checkeo de tipos
 +    "type-check:watch": "npm run type-check -- --watch", // 2. Checkeo de tipos pero mirando cuando cambien ficheros vuelvo a mirar
 
-    "build": "rimraf dist && webpack --mode development"
+    "build": "webpack --mode development"
 },
 
 ##  para que aparezcan los archivos *.ts para poder depurar el código en el navegador, necesitamos tener activo en tsconfig.json el 
@@ -994,7 +989,7 @@ module.exports = merge(common, {
   stats: "verbose",
 });
 
-### cambiamos el start:dev que tire de weback.dev.js e iual con build:dev y de la misma forma haríamos con build:prod y build:dev.
+### cambiamos el start:dev que tire de weback.dev.js e igual con build:dev y de la misma forma haríamos con build:prod y build:dev.
 
 "scripts": {
     "start": "run-p -l type-check:watch start:dev",
@@ -1003,10 +998,12 @@ module.exports = merge(common, {
 -    "build": "webpack --mode development"
 +    "build:dev": "webpack --config webpack.dev.js",
 +    "build:prod": "webpack --config webpack.prod.js"
-  },
+     "type-check": "tsc --noEmit",
+     "type-check:watch": "npm run type-check -- --watch",
+},
 
 
-### Ahora si hacemos un run build: dev sale todo desplegado, pero si hacemos un run build:prod sale todo minimizado y listo para subirlo a nuestro servidor. Esto es un espectáculo xd.
+### Ahora si hacemos un run build:dev sale todo desplegado, pero si hacemos un run build:prod sale todo minimizado y listo para subirlo a nuestro servidor. Esto es un espectáculo xd.
 
 # 25. Variables de entorno.
 
@@ -1066,7 +1063,7 @@ module.exports = merge(common, {
 + ],
 });
 
-### Ahora vamos a hacer una prueba y me va a salir por consola si estoy en producción o desarrollo, nos venimos a avareaComponent.tsx y le ponesmnos un console.log
+### Ahora vamos a hacer una prueba y me va a salir por consola si estoy en producción o desarrollo, nos venimos a avarageComponent.tsx y le ponesmnos un console.log
 
 + console.log(`Api base: ${process.env.API_BASE}`);
 
@@ -1081,6 +1078,11 @@ module.exports = merge(common, {
     "build:dev": "webpack --config webpack.dev.js",
     "build:prod": "webpack --config webpack.prod.js"
   },
+
+### Ejecuta esto para que se actualicen las builds
+
+npm run build:dev
+npm run build:prod
 
 # 26. Analizador de Bundler.
 ### Referencia:
